@@ -119,7 +119,9 @@ static int mirrorfs_getattr(const char *path, struct stat *stbuf,
         ABORT_IF_NOT_EQUAL(stbuf->st_uid, stbuf2.st_uid);
         ABORT_IF_NOT_EQUAL(stbuf->st_gid, stbuf2.st_gid);
         // do not compare st_rdev
-        ABORT_IF_NOT_EQUAL(stbuf->st_size, stbuf2.st_size);
+        if(!S_ISDIR(stbuf->st_mode)){
+            ABORT_IF_NOT_EQUAL(stbuf->st_size, stbuf2.st_size);
+        }
         // do not compare st_blksize
         // do not compare st_blocks
         // do not compare st_atim
@@ -567,6 +569,7 @@ static int mirrorfs_write(const char *path, const char *buf, size_t size,
 static int mirrorfs_release(const char *path, struct fuse_file_info *fi)
 {
     LOG_FUSE_OPERATION("%s", path);
+
     close(mirror_fds[fi->fh]);
     mirror_fds[fi->fh] = -1;
     // Must close fd1 after fd2 since mirror_fds uses fd1 as a key.
