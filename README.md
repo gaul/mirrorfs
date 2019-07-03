@@ -8,6 +8,12 @@ against a known good one, e.g., ext4.
 
 ## Usage
 
+On Fedora, install dependencies via:
+
+```
+sudo dnf install fuse3 fuse3-devel fuse3-libs
+```
+
 Build via `make` then run via:
 
 ```
