@@ -23,12 +23,15 @@
 #include <errno.h>
 #include <sys/time.h>
 
+#define QUOTE(str) #str
+#define EXPAND_AND_QUOTE(str) QUOTE(str)
+
 #define ABORT_IF_NOT_EQUAL(x, y) \
     do { \
         long _x = (x); \
         long _y = (y); \
         if (_x != _y) { \
-            fprintf(stderr, "%s: %ld != %ld\n", __func__, _x, _y); \
+            fprintf(stderr, "%s: %s %ld != %ld\n", __func__, EXPAND_AND_QUOTE(x), _x, _y); \
             if (abort_on_difference) { \
                 abort(); \
             } \
